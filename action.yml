@@ -1,0 +1,20 @@
+name: Bot tokens
+description: Access bot tokens
+inputs:
+  type:
+    description: Type of token required
+    required: true
+outputs:
+  token:
+    description: Token
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      run: |
+        # only statuses supported
+        [ "$INPUT_TYPE" == "statuses" ] || exit 1
+        # note, this token is limited to only updating statuses, worse
+        # case of misuse would be if someone spammed statuses on accesible
+        # repos. Do not do this for any tokens with more permissions.
+        echo "::set-output name=token::${{secrets.BOT_TOKEN_STATUSES}}"
